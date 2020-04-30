@@ -1,23 +1,23 @@
 from Crypto.PublicKey import RSA
-from Crypto.Signature import pkcs1_15
+from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
 
 # consisenty_check will be used to determine if the rsa_components follow RSA guidelines/rules
 consistency_check = True
-e = 79
-d = 1019
-N = 3337
+e = 23
+d = 47
+N = 143
 # tuple containing values needed to construct rsa_key
 rsa_components = (N, e, d)
 
 # Construct method takes in rsa components (e, d, n) and returns rsa_key object
 def construct_key():
-    rsa_key = RSA.construct(rsa_components, consistency_check)
-    return rsa_key
+    return RSA.construct((rsa_components))
 
 def convert_der(rsa_key):
-    f = open('private_key.der', 'wb')
-    f.write(rsa_key.export_key('DER', '1234'))
+    f = open('public_key.pem', 'wb')
+    key = rsa_key.exportKey('PEM')
+    f.write(key)
     f.close()
 
 def print_values():
@@ -26,8 +26,12 @@ def print_values():
     print('\n=============')
 
 def sign_message(message):
-    private_key = RSA.import_key(open('private_key.der', '1234').read())
-    message_hash = SHA256.new(message)
-    print("Message Hash: ", message_hash)
-    signature = pkcs1_15.new(private_key).sign(message_hash)
+    f = open('public_key.pem', 'rb')
+    private_key = RSA.importKey(f.read())
+    f.close()
+    message_hash = SHA256.new()
+    message_hash.update(message.encode('utf-8'))
+    print("Message Hash: ", message_hash.hexdigest())
+    pkcs = PKCS1_v1_5.new(private_key)
+    signature = pkcs.sign(message_hash)
     return signature

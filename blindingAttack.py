@@ -10,12 +10,13 @@ def main():
 	rsa_key = rsaGen.construct_key()
 	rsaGen.convert_der(rsa_key)
 	rsaGen.print_values()
-	message = "Hi Bob, it is Alice!"
+	message = 'Hi Bob'
 	signature = rsaGen.sign_message(message)
 	print('Signed:\t',signature)
 
+main()
 val_sent_by_eve = (M*pow(r,e, N))%N
-
+print("value sent by eve: ", val_sent_by_eve)
 signed_dash = pow(val_sent_by_eve , d , N)
 
 print('Bob sends Eve signature: ',signed_dash)
