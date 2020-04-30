@@ -3,28 +3,16 @@ import sys
 import os
 import hashlib
 import libnum
+import rsaGen
 
-e=79
-d=1019
-N=3337
-r=21
-Message='Pay Eve $1 million'
 
-print('==Initial values ====')
-print('e=',e,'d=',d,'N=',N)
-print('message=',Message,'r=',r)
-print('\n=============')
-
-array = os.urandom(1 << 20)
-md5 = hashlib.md5()
-md5.update(array)
-digest = md5.hexdigest()
-M = int(digest, 16) % N
-
-print('MD5 hash (mod N): ',M)
-
-signed=pow(M,d , N)
-print('Signed:\t',signed)
+def main():
+	rsa_key = rsaGen.construct_key()
+	rsaGen.convert_der(rsa_key)
+	rsaGen.print_values()
+	message = "Hi Bob, it is Alice!"
+	signature = rsaGen.sign_message(message)
+	print('Signed:\t',signature)
 
 val_sent_by_eve = (M*pow(r,e, N))%N
 
