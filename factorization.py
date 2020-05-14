@@ -1,4 +1,5 @@
 # Code adapted from https://asecuritysite.com/encryption/rsa12_2
+# and https://medium.com/coinmonks/integer-factorization-defining-the-limits-of-rsa-cracking-71fc0675bc0e 
 from Crypto.Util.number import long_to_bytes
 import libnum
 import sys
